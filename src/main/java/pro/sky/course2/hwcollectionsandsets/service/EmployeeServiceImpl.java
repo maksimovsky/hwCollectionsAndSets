@@ -39,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
-    public Map<String, Employee> getEmployees() {
-        return Collections.unmodifiableMap(employees);
+    public Collection<Employee> getEmployees() {
+        return Collections.unmodifiableCollection(employees.values());
     }
 }
