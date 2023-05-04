@@ -1,4 +1,4 @@
-package pro.sky.course2.hwcollectionsandsets;
+package pro.sky.course2.hwcollectionsandsets.model;
 
 import java.util.Objects;
 
