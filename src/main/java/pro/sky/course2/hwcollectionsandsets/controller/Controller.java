@@ -4,10 +4,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pro.sky.course2.hwcollectionsandsets.Employee;
+import pro.sky.course2.hwcollectionsandsets.model.Employee;
 import pro.sky.course2.hwcollectionsandsets.service.EmployeeServiceImpl;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/employee")
@@ -19,8 +19,8 @@ public class Controller {
     }
 
     @GetMapping
-    public List<Employee> getList() {
-        return service.getList();
+    public Collection<Employee> getEmployees() {
+        return service.getEmployees();
     }
 
     @GetMapping("/add")
