@@ -7,7 +7,6 @@ import pro.sky.course2.hwcollectionsandsets.exception.EmployeeAlreadyAddedExcept
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -66,17 +65,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public double getAverageSalary() {
-        return employees.values().stream().
-                mapToDouble(employee -> employee.getSalary()).average().getAsDouble();
+        return (Math.ceil((employees.values().stream().
+                mapToDouble(employee -> employee.getSalary()).average().getAsDouble()) * 100)) / 100;
     }
 
     public double getMonthSalaries() {
         return employees.values().stream().mapToDouble(employee -> employee.getSalary()).sum();
     }
 
-    public void indexSalaries(double percents) {
+    public Collection<Employee> indexSalaries(double percents) {
         employees.values().forEach(employee ->
                 employee.setSalary(Math.ceil(employee.getSalary() * (1 + percents / 100) * 100) / 100));
+        return getEmployees();
     }
 
     public Collection<String> getNames() {
@@ -93,46 +93,5 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Collection<Employee> getEmployeesWithSalaryMoreThan(double salary) {
         return employees.values().stream().
                 filter(employee -> employee.getSalary() >= salary).collect(Collectors.toUnmodifiableList());
-    }
-
-    public Collection<Employee> getEmployeesInDepartments() {
-        List<Employee> employeeList = new ArrayList<>();
-        Stream.iterate(0, i -> i + 1).limit(5).
-                forEach(i -> employeeList.addAll(getEmployeesInDepartment(i)));
-        return Collections.unmodifiableCollection(employeeList);
-    }
-
-    public Collection<Employee> getEmployeesInDepartment(int department) {
-        return employees.values().stream().
-                filter(employee -> employee.getDepartment() == department).collect(Collectors.toUnmodifiableList());
-    }
-
-    public Employee getEmployeeWithMinSalaryInDepartment(int department) {
-        return employees.values().stream().
-                filter(employee -> employee.getDepartment() == department).
-                min(Comparator.comparingDouble(employee -> employee.getSalary())).get();
-    }
-
-    public Employee getEmployeeWithMaxSalaryInDepartment(int department) {
-        return employees.values().stream().
-                filter(employee -> employee.getDepartment() == department).
-                max(Comparator.comparingDouble(employee -> employee.getSalary())).get();
-    }
-
-    public double getAverageSalaryInDepartment(int department) {
-        return employees.values().stream().filter(employee -> employee.getDepartment() == department).
-                mapToDouble(employee -> employee.getSalary()).average().getAsDouble();
-    }
-
-    public double getMonthSalariesInDepartment(int department) {
-        return employees.values().stream().
-                filter(employee -> employee.getDepartment() == department).
-                mapToDouble(employee -> employee.getSalary()).sum();
-    }
-
-    public void indexSalariesInDepartment(int department, double percents) {
-        employees.values().stream().filter(employee -> employee.getDepartment() == department).
-                forEach(employee -> employee.setSalary(
-                        Math.ceil(employee.getSalary() * (1 + percents / 100) * 100) / 100));
     }
 }
