@@ -3,7 +3,7 @@ package pro.sky.course2.hwcollectionsandsets.service;
 import pro.sky.course2.hwcollectionsandsets.model.Employee;
 
 public interface EmployeeService {
-    Employee addEmployee(String firstName, String lastName);
+    Employee addEmployee(String firstName, String lastName, double salary, int department);
 
     Employee removeEmployee(String firstName, String lastName);
 

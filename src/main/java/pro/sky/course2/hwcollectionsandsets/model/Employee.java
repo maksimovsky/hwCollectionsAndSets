@@ -1,14 +1,23 @@
 package pro.sky.course2.hwcollectionsandsets.model;
 
+import pro.sky.course2.hwcollectionsandsets.exception.WrongDepartmentException;
+
 import java.util.Objects;
 
 public class Employee {
     private final String firstName;
     private final String lastName;
+    private double salary;
+    private int department;
 
-    public Employee(String firstName, String lastName) {
+    public Employee(String firstName, String lastName, double salary, int department) {
+        if (department < 1 || department > 5) {
+            throw new WrongDepartmentException();
+        }
         this.firstName = firstName;
         this.lastName = lastName;
+        this.salary = salary;
+        this.department = department;
     }
 
     public String getFirstName() {
@@ -17,6 +26,25 @@ public class Employee {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public int getDepartment() {
+        return department;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public void setDepartment(int department) {
+        if (department < 1 || department > 5) {
+            throw new WrongDepartmentException();
+        }
+        this.department = department;
     }
 
     @Override
