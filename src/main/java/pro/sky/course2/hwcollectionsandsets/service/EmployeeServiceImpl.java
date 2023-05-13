@@ -42,54 +42,64 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.get(firstName + lastName);
     }
 
+    @Override
     public Employee setSalary(String firstName, String lastName, double salary) {
         Employee employee = findEmployee(firstName, lastName);
         employee.setSalary(salary);
         return employee;
     }
 
+    @Override
     public Employee setDepartment(String firstName, String lastName, int department) {
         Employee employee = findEmployee(firstName, lastName);
         employee.setDepartment(department);
         return employee;
     }
 
+    @Override
     public Employee getEmployeeWithMinSalary() {
         return employees.values().stream().
                 min(Comparator.comparingDouble(employee -> employee.getSalary())).get();
     }
 
+    @Override
     public Employee getEmployeeWithMaxSalary() {
         return employees.values().stream().
                 max(Comparator.comparingDouble(employee -> employee.getSalary())).get();
     }
 
+    @Override
     public double getAverageSalary() {
         return (Math.ceil((employees.values().stream().
                 mapToDouble(employee -> employee.getSalary()).average().getAsDouble()) * 100)) / 100;
     }
 
+    @Override
     public double getMonthSalaries() {
         return employees.values().stream().mapToDouble(employee -> employee.getSalary()).sum();
     }
 
+    @Override
     public Collection<Employee> indexSalaries(double percents) {
         employees.values().forEach(employee ->
                 employee.setSalary(Math.ceil(employee.getSalary() * (1 + percents / 100) * 100) / 100));
         return getEmployees();
     }
 
+    @Override
     public Collection<String> getNames() {
         return employees.values().stream().
                 map(employee -> employee.getFirstName() + " " + employee.getLastName()).
                 collect(Collectors.toUnmodifiableList());
     }
 
+    @Override
     public Collection<Employee> getEmployeesWithSalaryLessThan(double salary) {
         return employees.values().stream().
                 filter(employee -> employee.getSalary() < salary).collect(Collectors.toUnmodifiableList());
     }
 
+    @Override
     public Collection<Employee> getEmployeesWithSalaryMoreThan(double salary) {
         return employees.values().stream().
                 filter(employee -> employee.getSalary() >= salary).collect(Collectors.toUnmodifiableList());

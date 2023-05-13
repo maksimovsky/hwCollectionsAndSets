@@ -1,56 +1,21 @@
 package pro.sky.course2.hwcollectionsandsets.service;
 
-import org.springframework.stereotype.Service;
 import pro.sky.course2.hwcollectionsandsets.model.Employee;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Collection;
 
-@Service
-public class DepartmentService {
-    private static final EmployeeServiceImpl departments = new EmployeeServiceImpl();
+public interface DepartmentService {
+    public Collection<Employee> getEmployeesInDepartment(int department);
 
-    public Collection<Employee> getEmployeesInDepartment(int department) {
-        return departments.getEmployees().stream().
-                filter(employee -> employee.getDepartment() == department).collect(Collectors.toUnmodifiableList());
-    }
+    Collection<Employee> getEmployeesInDepartments();
 
-    public Collection<Employee> getEmployeesInDepartments() {
-        List<Employee> employeeList = new ArrayList<>();
-        Stream.iterate(0, i -> i + 1).limit(5).
-                forEach(i -> employeeList.addAll(getEmployeesInDepartment(i)));
-        return Collections.unmodifiableCollection(employeeList);
-    }
+    Employee getEmployeeWithMinSalaryInDepartment(int department);
 
-    public Employee getEmployeeWithMinSalaryInDepartment(int department) {
-        return departments.getEmployees().stream().
-                filter(employee -> employee.getDepartment() == department).
-                min(Comparator.comparingDouble(employee -> employee.getSalary())).get();
-    }
+    Employee getEmployeeWithMaxSalaryInDepartment(int department);
 
-    public Employee getEmployeeWithMaxSalaryInDepartment(int department) {
-        return departments.getEmployees().stream().
-                filter(employee -> employee.getDepartment() == department).
-                max(Comparator.comparingDouble(employee -> employee.getSalary())).get();
-    }
+    double getAverageSalaryInDepartment(int department);
 
-    public double getAverageSalaryInDepartment(int department) {
-        return (Math.ceil((departments.getEmployees().stream().
-                filter(employee -> employee.getDepartment() == department).
-                mapToDouble(employee -> employee.getSalary()).average().getAsDouble()) * 100)) / 100;
-    }
+    double getMonthSalariesInDepartment(int department);
 
-    public double getMonthSalariesInDepartment(int department) {
-        return departments.getEmployees().stream().
-                filter(employee -> employee.getDepartment() == department).
-                mapToDouble(employee -> employee.getSalary()).sum();
-    }
-
-    public Collection<Employee> indexSalariesInDepartment(int department, double percents) {
-        departments.getEmployees().stream().filter(employee -> employee.getDepartment() == department).
-                forEach(employee -> employee.setSalary(
-                        Math.ceil(employee.getSalary() * (1 + percents / 100) * 100) / 100));
-        return getEmployeesInDepartment(department);
-    }
+    Collection<Employee> indexSalariesInDepartment(int department, double percents);
 }
