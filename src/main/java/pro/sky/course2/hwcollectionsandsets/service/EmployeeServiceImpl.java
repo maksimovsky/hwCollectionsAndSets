@@ -1,12 +1,15 @@
 package pro.sky.course2.hwcollectionsandsets.service;
 
 import org.springframework.stereotype.Service;
+import pro.sky.course2.hwcollectionsandsets.exception.WrongNameException;
 import pro.sky.course2.hwcollectionsandsets.model.Employee;
 import pro.sky.course2.hwcollectionsandsets.exception.EmployeeNotFoundException;
 import pro.sky.course2.hwcollectionsandsets.exception.EmployeeAlreadyAddedException;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -19,6 +22,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee addEmployee(String firstName, String lastName, double salary, int department) {
+        validateName(firstName, lastName);
         if (employees.containsKey(firstName + lastName)) {
             throw new EmployeeAlreadyAddedException();
         }
@@ -29,6 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee removeEmployee(String firstName, String lastName) {
+        validateName(firstName, lastName);
         Employee employee = findEmployee(firstName, lastName);
         employees.remove(firstName + lastName);
         return employee;
@@ -36,6 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee findEmployee(String firstName, String lastName) {
+        validateName(firstName, lastName);
         if (!employees.containsKey(firstName + lastName)) {
             throw new EmployeeNotFoundException();
         }
@@ -44,6 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee setSalary(String firstName, String lastName, double salary) {
+        validateName(firstName, lastName);
         Employee employee = findEmployee(firstName, lastName);
         employee.setSalary(salary);
         return employee;
@@ -51,6 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee setDepartment(String firstName, String lastName, int department) {
+        validateName(firstName, lastName);
         Employee employee = findEmployee(firstName, lastName);
         employee.setDepartment(department);
         return employee;
@@ -103,5 +111,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Collection<Employee> getEmployeesWithSalaryMoreThan(double salary) {
         return employees.values().stream().
                 filter(employee -> employee.getSalary() >= salary).collect(Collectors.toUnmodifiableList());
+    }
+
+    private static void validateName(String firstName, String lastName) {
+        if (!isAlpha(firstName) || !isAlpha(lastName)) {
+            throw new WrongNameException();
+        }
     }
 }
