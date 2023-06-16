@@ -1,7 +1,7 @@
 package pro.sky.course2.hwcollectionsandsets.model;
 
+import org.apache.commons.lang3.StringUtils;
 import pro.sky.course2.hwcollectionsandsets.exception.WrongDepartmentException;
-
 import java.util.Objects;
 
 public class Employee {
@@ -14,8 +14,8 @@ public class Employee {
         if (department < 1 || department > 5) {
             throw new WrongDepartmentException();
         }
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = StringUtils.capitalize(firstName.toLowerCase());
+        this.lastName = StringUtils.capitalize(lastName.toLowerCase());
         this.salary = salary;
         this.department = department;
     }
