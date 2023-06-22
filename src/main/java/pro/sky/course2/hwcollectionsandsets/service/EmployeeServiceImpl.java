@@ -17,17 +17,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     private static final Map<String, Employee> employees = new HashMap<>();
 
     public Collection<Employee> getEmployees() {
-        return Collections.unmodifiableCollection(employees.values());
+        return List.copyOf(employees.values());
     }
 
     @Override
     public Employee addEmployee(String firstName, String lastName, double salary, int department) {
         validateName(firstName, lastName);
-        if (employees.containsKey(firstName + lastName)) {
+        Employee employee = new Employee(firstName, lastName, salary, department);
+        if (employees.containsKey(employee.getFirstName() + employee.getLastName())) {
             throw new EmployeeAlreadyAddedException();
         }
-        Employee employee = new Employee(firstName, lastName, salary, department);
-        employees.put(firstName + lastName, employee);
+        employees.put(employee.getFirstName() + employee.getLastName(), employee);
         return employee;
     }
 
